@@ -23,6 +23,14 @@ namespace PCM.Jobs.Employee
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+             services.AddAuthentication("Bearer")
+                    .AddIdentityServerAuthentication(options =>
+                    {
+                        options.Authority = Configuration["OAuth:Authority"]; 
+                        options.RequireHttpsMetadata = false;
+
+                        options.ApiName = Configuration["OAuth:Name"];
+                    });
             services.AddMvc();
         }
 
@@ -34,6 +42,7 @@ namespace PCM.Jobs.Employee
                 app.UseDeveloperExceptionPage();
             }
 
+            app.UseAuthentication();
             app.UseMvc();
         }
     }
